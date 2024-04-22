@@ -2,6 +2,7 @@ import React from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
 
 import {LoginScreen} from '@cs/screens';
+import {MainNavigator} from './index';
 
 export enum AuthRoutes {
   Login = 'Login',
@@ -23,6 +24,8 @@ const AuthNavigator = () => {
         headerShown: false,
       }}>
       <AuthStack.Screen name={AuthRoutes.Login} component={LoginScreen} />
+
+      <AuthStack.Screen name={AuthRoutes.Main} component={MainNavigator} />
     </AuthStack.Navigator>
   );
 };

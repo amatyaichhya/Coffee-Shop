@@ -4,16 +4,10 @@ import {Pressable, ScrollView} from 'react-native';
 import {AuthRoutes, AuthStackScreenProps} from '@cs/routes';
 import {FontedText} from '@cs/components';
 import {CommonStyles, hs} from '@cs/constants';
-import {useAppDispatch} from '@cs/hooks';
-import {setLoggedIn} from '@cs/redux/slices';
 
-const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
-  const dispatch = useAppDispatch();
-
-  const handleLogin = () => {
-    dispatch(setLoggedIn(true));
-  };
-
+const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = ({
+  navigation,
+}) => {
   return (
     <ScrollView
       contentContainerStyle={[
@@ -21,7 +15,7 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
         CommonStyles.justifyContentCenter,
         CommonStyles.flexRoot,
       ]}>
-      <Pressable onPress={handleLogin}>
+      <Pressable onPress={() => navigation.navigate(AuthRoutes.Main)}>
         <FontedText text="LOGIN" fontSize={hs.w12} />
       </Pressable>
     </ScrollView>

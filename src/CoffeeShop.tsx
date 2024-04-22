@@ -1,15 +1,13 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 
-import {AuthNavigator, MainNavigator} from './routes';
-import {useAppSelector} from './hooks';
+import {AuthNavigator} from './routes';
 
 const CoffeeShop = () => {
-  const {isLoggedIn} = useAppSelector(state => state.auth);
-
   return (
     <NavigationContainer>
-      {!isLoggedIn ? <AuthNavigator /> : <MainNavigator />}
+      {/* {!isLoggedIn ? <AuthNavigator /> : <MainNavigator />} */}
+      <AuthNavigator />
     </NavigationContainer>
   );
 };

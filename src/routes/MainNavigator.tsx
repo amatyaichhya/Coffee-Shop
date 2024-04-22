@@ -85,10 +85,10 @@ const MainNavigator = () => {
 
 const STYLES = StyleSheet.create({
   headerLeftStyles: {
-    paddingLeft: vs.h8,
+    paddingLeft: hs.w8,
   },
   headerRightStyles: {
-    paddingRight: vs.h8,
+    paddingRight: hs.w8,
   },
   headerTitleStyles: {
     fontFamily: AppFonts.SoraSemiBold,
