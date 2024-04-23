@@ -18,7 +18,7 @@ export const vs = {
   h26: heightToDp(26),
   h30: heightToDp(30),
   h32: heightToDp(32),
-  h36: heightToDp(36),
+  h34: heightToDp(34),
   h40: heightToDp(40),
   h48: heightToDp(48),
   h50: heightToDp(50),

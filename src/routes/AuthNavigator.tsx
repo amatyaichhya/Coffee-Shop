@@ -1,7 +1,8 @@
 import React from 'react';
-import {createStackNavigator} from '@react-navigation/stack';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import {LoginScreen} from '@cs/screens';
+import {Colors} from '@cs/constants';
 
 export enum AuthRoutes {
   Login = 'Login',
@@ -13,7 +14,7 @@ export type AuthStackParamsList = {
   [AuthRoutes.Main]: undefined;
 };
 
-const AuthStack = createStackNavigator<AuthStackParamsList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamsList>();
 
 const AuthNavigator = () => {
   return (
@@ -21,6 +22,7 @@ const AuthNavigator = () => {
       screenOptions={{
         headerShadowVisible: false,
         headerShown: false,
+        navigationBarColor: Colors.black,
       }}>
       <AuthStack.Screen name={AuthRoutes.Login} component={LoginScreen} />
     </AuthStack.Navigator>
