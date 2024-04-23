@@ -8,7 +8,7 @@ import {HeaderBackButton} from '@react-navigation/elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {CoffeeDetailScreen} from '@cs/screens';
-import {AppFonts, hs, vs} from '@cs/constants';
+import {AppFonts, vs} from '@cs/constants';
 import {BottomTabNavigator} from './index';
 import {HeartOutlineIcon} from '@cs/assets';
 

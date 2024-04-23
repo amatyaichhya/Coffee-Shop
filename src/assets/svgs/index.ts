@@ -3,5 +3,13 @@ import HomeIcon from './Home.svg';
 import CartIcon from './Cart.svg';
 import HeartIcon from './Heart.svg';
 import HeartOutlineIcon from './HeartOutline.svg';
+import GoogleLogo from './GoogleLogo.svg';
 
-export {NotificationIcon, HomeIcon, CartIcon, HeartIcon, HeartOutlineIcon};
+export {
+  NotificationIcon,
+  HomeIcon,
+  CartIcon,
+  HeartIcon,
+  HeartOutlineIcon,
+  GoogleLogo,
+};
