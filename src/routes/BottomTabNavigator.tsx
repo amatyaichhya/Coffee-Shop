@@ -40,6 +40,7 @@ const BottomTabNavigator: FC<
         },
         tabBarInactiveTintColor: Colors.darkGray,
         tabBarActiveTintColor: Colors.primary,
+        tabBarHideOnKeyboard: true,
       }}>
       <BottomTab.Screen
         name={BottomTabRoutes.Home}

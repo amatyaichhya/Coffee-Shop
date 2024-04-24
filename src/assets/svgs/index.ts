@@ -4,6 +4,7 @@ import CartIcon from './Cart.svg';
 import HeartIcon from './Heart.svg';
 import HeartOutlineIcon from './HeartOutline.svg';
 import GoogleLogo from './GoogleLogo.svg';
+import SortIcon from './Sort.svg';
 
 export {
   NotificationIcon,
@@ -12,4 +13,5 @@ export {
   HeartIcon,
   HeartOutlineIcon,
   GoogleLogo,
+  SortIcon,
 };

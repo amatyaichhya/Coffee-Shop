@@ -4,6 +4,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {persistStore, persistReducer} from 'redux-persist';
 
 import {rootReducer} from './RootReducer';
+import {AppApi} from '@cs/apis';
 
 const persistConfig = {
   key: 'root',
@@ -18,7 +19,7 @@ export const store = configureStore({
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware({
       serializableCheck: false,
-    }),
+    }).concat([AppApi.middleware]),
 });
 
 export const persistor = persistStore(store);

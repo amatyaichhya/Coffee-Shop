@@ -65,7 +65,7 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
           <FontedText
             text={'Coffee so good,\nyour taste buds\nwill love it.'}
             color={Colors.white}
-            fontSize={vs.h34}
+            fontSize={hs.w34}
             fontFamily={AppFonts.SoraBold700}
             customTextStyle={[CommonStyles.centerText, STYLES.textSpacing]}
           />
@@ -73,7 +73,7 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
           <FontedText
             text={'The best grain, the finest roast, the\npowerful flavor.'}
             color={Colors.white}
-            fontSize={vs.h14}
+            fontSize={hs.w14}
             customTextStyle={[
               CommonStyles.centerText,
               STYLES.textSpacing,
