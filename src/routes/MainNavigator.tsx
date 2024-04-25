@@ -9,11 +9,16 @@ import {CoffeeDetailScreen} from '@cs/screens';
 import {AppFonts, Colors, vs} from '@cs/constants';
 import {BottomTabNavigator} from './index';
 import {HeartOutlineIcon} from '@cs/assets';
-import {Coffee} from '@cs/models';
 
 export enum MainRoutes {
   CoffeeDetail = 'Detail',
   BottomTab = 'BottomTab',
+}
+
+export interface Coffee {
+  id: number;
+  imageUrl: string;
+  name: string;
 }
 
 interface CoffeeDetailRouteParams {
@@ -74,6 +79,9 @@ const MainNavigator = () => {
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           headerRight: () => renderHeaderRightButton(),
           headerTitleStyle: STYLES.headerTitleStyles,
+          headerBackgroundContainerStyle: {
+            backgroundColor: Colors.lightGray100,
+          },
         }}
         sharedElements={route => {
           const {item} = route.params;

@@ -47,7 +47,10 @@ const CoffeePlaceholder: FC<CoffeePlaceholderProps> = ({}) => {
   return (
     <Pressable style={STYLES.cardContainerStyles}>
       <View style={STYLES.coffeeImage}>
-        <ShimmerPlaceholder height={heightToDp(132)} />
+        <ShimmerPlaceholder
+          height={heightToDp(132)}
+          style={CommonStyles.image}
+        />
       </View>
 
       <View style={STYLES.productDetailContainer}>

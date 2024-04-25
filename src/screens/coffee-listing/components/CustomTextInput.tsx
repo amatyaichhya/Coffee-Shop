@@ -30,6 +30,7 @@ const STYLES = StyleSheet.create({
     borderRadius: hs.w12,
     paddingHorizontal: hs.w10,
     paddingVertical: vs.h10,
+    color: Colors.white,
   },
   mainContainerStyles: {
     paddingHorizontal: 0,
@@ -39,6 +40,7 @@ const STYLES = StyleSheet.create({
     backgroundColor: Colors.primary,
     borderRadius: hs.w12,
     paddingHorizontal: hs.w12,
+    paddingVertical: hs.w12,
     height: '100%',
   },
 });

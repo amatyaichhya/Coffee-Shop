@@ -1,4 +1,4 @@
-import React, {FC, useState} from 'react';
+import React, {FC, useEffect, useState} from 'react';
 import {FlatList, StatusBar, View, StyleSheet, Keyboard} from 'react-native';
 import {StickyHeaderScrollView} from 'react-native-sticky-parallax-header';
 import {CommonStyles, hs, vs, Colors} from '@cs/constants';
@@ -35,9 +35,21 @@ const CoffeeListingScreen: FC<
   const [textBottomWidth, setTextBottomWidth] = useState(0);
   const [categories, setCategories] = useState(coffeeVarieties);
   const [searchValue, setSearchValue] = useState('');
-  const [searchTerm, setSearchTerm] = useState('');
+  const [products, setProducts] = useState<Array<Coffee>>([]);
 
-  const {data, isLoading} = useGetCoffeeProductListQuery({name: searchTerm});
+  const {data, isLoading} = useGetCoffeeProductListQuery({});
+
+  useEffect(() => {
+    if (data?.length) {
+      setProducts(data);
+    }
+  }, [data]);
+
+  useEffect(() => {
+    if (!searchValue) {
+      setProducts(data);
+    }
+  }, [data, searchValue]);
 
   const handleTextLayout = (event: any) => {
     const {width} = event.nativeEvent.layout;
@@ -61,11 +73,14 @@ const CoffeeListingScreen: FC<
 
   const handleSearchByName = () => {
     Keyboard.dismiss();
-    setSearchTerm(searchValue);
   };
 
   const handleTextChange = (text: string) => {
     setSearchValue(text);
+
+    if (text && products?.length) {
+      setProducts(products.filter(product => product.name.includes(text)));
+    }
   };
 
   const handleRenderItem = ({item}: {item: Coffee}) =>
@@ -81,7 +96,9 @@ const CoffeeListingScreen: FC<
             : ''
         }
         onNavigateToDetail={() =>
-          navigation.navigate(MainRoutes.CoffeeDetail, {item})
+          navigation.navigate(MainRoutes.CoffeeDetail, {
+            item: {id: item.id, imageUrl: item.imageUrl, name: item.name},
+          })
         }
         coffeeId={item.id.toString()}
         coffeePrice={item.price.toString()}
@@ -137,7 +154,7 @@ const CoffeeListingScreen: FC<
           STYLES.contentContainerStyles,
         ]}
         keyExtractor={(_, index) => index.toString()}
-        data={isLoading ? Array(4).fill({}) : data}
+        data={isLoading ? Array(4).fill({}) : products}
         renderItem={handleRenderItem}
         columnWrapperStyle={{gap: hs.w6}}
         numColumns={2}
