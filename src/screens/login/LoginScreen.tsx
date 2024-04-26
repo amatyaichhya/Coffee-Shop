@@ -1,6 +1,20 @@
-import React, {FC} from 'react';
-import {Image, Pressable, SafeAreaView, StatusBar, View} from 'react-native';
+import React, {FC, useState} from 'react';
+import {
+  Image,
+  Pressable,
+  SafeAreaView,
+  StatusBar,
+  View,
+  StyleSheet,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {
+  GoogleSignin,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 import {AuthRoutes, AuthStackScreenProps} from '@cs/routes';
 import {AppFonts, Colors, CommonStyles, hs, vs} from '@cs/constants';
@@ -9,8 +23,7 @@ import {setLoggedIn} from '@cs/redux/slices';
 import {Images} from '@cs/assets/pngs';
 import {GoogleLogo} from '@cs/assets';
 import {FontedText} from '@cs/components';
-import {StyleSheet} from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
+import {setUser} from '@cs/redux/slices/auth/AuthSlice';
 
 const STYLES = StyleSheet.create({
   bottomContainer: {backgroundColor: Colors.black, paddingBottom: vs.h10},
@@ -28,8 +41,51 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
   const dispatch = useAppDispatch();
   const insets = useSafeAreaInsets();
 
-  const handleLogin = () => {
-    dispatch(setLoggedIn(true));
+  const [isGoogleLogging, setIsGoogleLogging] = useState<boolean>(false);
+
+  // const handleLogin = () => {
+  //   dispatch(setLoggedIn(true));
+  // };
+
+  const handleContinueWithGooglePress = async () => {
+    try {
+      setIsGoogleLogging(true);
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+
+      if (userInfo?.idToken) {
+        dispatch(setUser(userInfo?.user));
+        dispatch(setLoggedIn(true));
+      }
+    } catch (error: any) {
+      console.log(error);
+
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        Alert.alert('Unable to connect!', 'Play Services is not available');
+      } else {
+        // some other error happened
+        if (Number(error.status) === 400) {
+          await GoogleSignin.signOut();
+
+          return Alert.alert(
+            'Login Failed!',
+            error?.data?.responseMsg || 'Something went wrong.',
+          );
+        }
+
+        Alert.alert(
+          'Unable to connect!',
+          'Something went wrong. Please try again later.',
+        );
+      }
+    } finally {
+      setIsGoogleLogging(false);
+    }
   };
 
   return (
@@ -66,13 +122,13 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
             text={'Coffee so good,\nyour taste buds\nwill love it.'}
             color={Colors.white}
             fontSize={hs.w34}
-            fontFamily={AppFonts.SoraBold700}
+            fontFamily={AppFonts.SoraSemiBold}
             customTextStyle={[CommonStyles.centerText, STYLES.textSpacing]}
           />
 
           <FontedText
             text={'The best grain, the finest roast, the\npowerful flavor.'}
-            color={Colors.white}
+            color={Colors.lightGray300}
             fontSize={hs.w14}
             customTextStyle={[
               CommonStyles.centerText,
@@ -90,14 +146,21 @@ const LoginScreen: FC<AuthStackScreenProps<AuthRoutes.Login>> = () => {
             CommonStyles.justifyContentCenter,
             STYLES.buttonContainerStyles,
           ]}
-          onPress={handleLogin}>
-          <GoogleLogo />
+          onPress={isGoogleLogging ? undefined : handleContinueWithGooglePress}>
+          {isGoogleLogging ? (
+            <ActivityIndicator color="rgba(0, 0, 0, 0.54)" size={24} />
+          ) : (
+            <>
+              <GoogleLogo />
 
-          <FontedText
-            text="Continue with Google"
-            fontSize={20}
-            customTextStyle={[STYLES.textSpacing, STYLES.textOpacity]}
-          />
+              <FontedText
+                text="Continue with Google"
+                fontSize={20}
+                fontFamily={AppFonts.SoraSemiBold}
+                customTextStyle={[STYLES.textSpacing, STYLES.textOpacity]}
+              />
+            </>
+          )}
         </Pressable>
       </View>
     </SafeAreaView>

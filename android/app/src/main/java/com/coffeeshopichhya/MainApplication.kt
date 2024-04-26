@@ -1,4 +1,4 @@
-package com.coffeeshop
+package com.coffeeshopichhya
 
 import android.app.Application
 import com.facebook.react.PackageList
