@@ -41,11 +41,13 @@ const CategoryOptions: FC<CategoryOptionsProps> = ({
       onPress={() => handleSelectCategories(item.id)}
       style={{
         ...STYLES.categoryStyles,
-        backgroundColor: item.isSelected ? Colors.primary : Colors.lightGray,
+        backgroundColor: item.isSelected
+          ? Colors.primary
+          : theme.secondaryBackground,
       }}>
       <FontedText
         text={item.variety}
-        color={item.isSelected ? Colors.white : Colors.lightBlack50}
+        color={item.isSelected ? Colors.white : theme.textColor}
         fontFamily={AppFonts.SoraSemiBold}
         fontSize={hs.w14}
       />

@@ -14,7 +14,7 @@ import {SharedElement} from 'react-navigation-shared-element';
 import {CImage, FontedText} from '@cs/components';
 import {AppFonts, Colors, CommonStyles, hs, vs} from '@cs/constants';
 import {MainRoutes, MainStackScreenProps} from '@cs/routes';
-import {height} from '@cs/helpers';
+import {height, useCustomTheme} from '@cs/helpers';
 import {useGetCoffeeProductDetailQuery} from '@cs/apis';
 import {Images} from '@cs/assets';
 import {CoffeeDetailStyles as STYLES} from './styles';
@@ -34,6 +34,8 @@ const sizes = [
 const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
   route,
 }) => {
+  const theme = useCustomTheme();
+
   const {item: product} = route.params || {};
 
   const [showFullContent, setShowFullContent] = useState<boolean>(false);
@@ -79,13 +81,15 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
         CommonStyles.alignItemsCenter,
         STYLES.sizeContainer,
         {
-          backgroundColor: !item.isSelected ? Colors.white : Colors.secondary,
-          borderColor: item.isSelected ? Colors.primary : Colors.lightGray200,
+          backgroundColor: !item.isSelected
+            ? theme.plainBackground
+            : Colors.secondary,
+          borderColor: item.isSelected ? Colors.primary : theme.dividerColor,
         },
       ]}>
       <FontedText
         text={item.size}
-        color={item.isSelected ? Colors.primary : Colors.darkestGray}
+        color={item.isSelected ? Colors.primary : theme.darkTextColor}
         fontFamily={AppFonts.SoraSemiBold}
       />
     </Pressable>
@@ -99,7 +103,7 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
       style={[
         CommonStyles.flexRoot,
         {
-          backgroundColor: Colors.lightGray100,
+          backgroundColor: theme.background,
         },
       ]}>
       <ScrollView
@@ -135,7 +139,7 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
               CommonStyles.alignItemsCenter,
               {height: height / 3},
             ]}>
-            <FontedText text="No details available." />
+            <FontedText text="No details available." color={theme.textColor} />
           </View>
         ) : (
           <View style={{marginBottom: vs.h14}}>
@@ -143,7 +147,7 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
               <FontedText
                 text={productDetail?.name}
                 numberOfLines={1}
-                color={Colors.darkestGray}
+                color={theme.darkTextColor}
                 fontFamily={AppFonts.SoraSemiBold}
                 fontSize={hs.w20}
               />
@@ -153,7 +157,7 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
                   text={`With ${productDetail?.flavorProfile?.join(', ')}`}
                   fontSize={hs.w12}
                   numberOfLines={1}
-                  color={Colors.darkGray}
+                  color={theme.lightTextColor}
                 />
               ) : null}
             </View>
@@ -195,13 +199,15 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
               </View>
             </View>
 
-            <View style={STYLES.divider} />
+            <View
+              style={[STYLES.divider, {backgroundColor: theme.dividerColor}]}
+            />
 
             <View style={STYLES.detailContainer}>
               <FontedText
                 text="Description"
                 numberOfLines={1}
-                color={Colors.darkestGray}
+                color={theme.darkTextColor}
                 fontFamily={AppFonts.SoraSemiBold}
               />
 
@@ -227,7 +233,7 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
               <FontedText
                 text="Size"
                 numberOfLines={1}
-                color={Colors.darkestGray}
+                color={theme.darkTextColor}
                 fontFamily={AppFonts.SoraSemiBold}
               />
 
@@ -256,12 +262,19 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
             CommonStyles.flexRow,
             CommonStyles.justifySpaceBetween,
             STYLES.footerContainer,
+            {
+              backgroundColor: theme.headerBackground,
+              borderColor:
+                theme.dividerColor === Colors.lightGray200
+                  ? theme.dividerColor
+                  : Colors.darkestGray,
+            },
           ]}>
           <View style={[CommonStyles.alignItemsCenter, STYLES.footerText]}>
             <View>
               <FontedText
                 text="Price"
-                color={Colors.darkGray}
+                color={theme.lightTextColor}
                 fontSize={hs.w14}
               />
               <FontedText

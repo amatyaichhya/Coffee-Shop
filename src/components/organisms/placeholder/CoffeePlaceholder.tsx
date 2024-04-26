@@ -1,10 +1,10 @@
 import React, {FC} from 'react';
-import {View, StyleSheet, Pressable} from 'react-native';
-
-import {Colors, CommonStyles, hs, vs} from '@cs/constants';
-import {heightToDp, widthToDp} from '@cs/helpers';
+import {View, StyleSheet, Pressable, useColorScheme} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {createShimmerPlaceholder} from 'react-native-shimmer-placeholder';
+
+import {Colors, CommonStyles, hs, vs} from '@cs/constants';
+import {heightToDp, useCustomTheme, widthToDp} from '@cs/helpers';
 
 interface CoffeePlaceholderProps {}
 
@@ -43,13 +43,25 @@ const STYLES = StyleSheet.create({
 
 const CoffeePlaceholder: FC<CoffeePlaceholderProps> = ({}) => {
   const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
+  const theme = useCustomTheme();
+
+  const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <Pressable style={STYLES.cardContainerStyles}>
+    <Pressable
+      style={[
+        STYLES.cardContainerStyles,
+        {backgroundColor: theme.plainBackground, borderColor: theme.background},
+      ]}>
       <View style={STYLES.coffeeImage}>
         <ShimmerPlaceholder
           height={heightToDp(132)}
           style={CommonStyles.image}
+          shimmerColors={
+            isDarkMode
+              ? [Colors.darkGray, Colors.lightGray300, Colors.lightGray200]
+              : [Colors.lightGray200, Colors.lightGray100, Colors.lightGray]
+          }
         />
       </View>
 
@@ -58,18 +70,44 @@ const CoffeePlaceholder: FC<CoffeePlaceholderProps> = ({}) => {
           <ShimmerPlaceholder
             height={hs.w16}
             style={STYLES.textPlaceholderStyles}
+            shimmerColors={
+              isDarkMode
+                ? [Colors.darkGray, Colors.lightGray300, Colors.lightGray200]
+                : [Colors.lightGray200, Colors.lightGray100, Colors.lightGray]
+            }
           />
 
           <ShimmerPlaceholder
             height={hs.w12}
             style={STYLES.textPlaceholderStyles}
+            shimmerColors={
+              isDarkMode
+                ? [Colors.darkGray, Colors.lightGray300, Colors.lightGray200]
+                : [Colors.lightGray200, Colors.lightGray100, Colors.lightGray]
+            }
           />
         </View>
 
         <View style={[CommonStyles.flexRow, CommonStyles.justifySpaceBetween]}>
-          <ShimmerPlaceholder height={hs.w32} width={hs.w44} />
+          <ShimmerPlaceholder
+            height={hs.w32}
+            width={hs.w44}
+            shimmerColors={
+              isDarkMode
+                ? [Colors.darkGray, Colors.lightGray300]
+                : [Colors.lightGray200, Colors.lightGray100]
+            }
+          />
 
-          <ShimmerPlaceholder height={hs.w32} width={hs.w32} />
+          <ShimmerPlaceholder
+            height={hs.w32}
+            width={hs.w32}
+            shimmerColors={
+              isDarkMode
+                ? [Colors.darkGray, Colors.lightGray300]
+                : [Colors.lightGray200, Colors.lightGray100]
+            }
+          />
         </View>
       </View>
     </Pressable>

@@ -39,7 +39,7 @@ const ShimmerPlaceholder = createShimmerPlaceholder(LinearGradient);
 const CustomImage: FC<CustomImageProps> = ({
   customContainerStyle,
   imageSource,
-  emptyImage = Images.background,
+  emptyImage = Images.defaultImg,
   hasOverlay = false,
   overlayChildren,
   customOverlayStyles = {},

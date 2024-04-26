@@ -37,6 +37,7 @@ export const CoffeeDetailStyles = StyleSheet.create({
     borderTopLeftRadius: hs.w20,
     borderTopRightRadius: hs.w20,
     borderWidth: hs.w1,
+    borderBottomWidth: 0,
     borderColor: Colors.lightGray200,
     backgroundColor: Colors.lightGray100,
     paddingHorizontal: hs.w18,

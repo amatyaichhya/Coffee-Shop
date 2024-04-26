@@ -6,9 +6,10 @@ import {HeaderBackButton} from '@react-navigation/elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {CoffeeDetailScreen} from '@cs/screens';
-import {AppFonts, Colors, vs} from '@cs/constants';
+import {AppFonts, vs} from '@cs/constants';
 import {BottomTabNavigator} from './index';
 import {HeartOutlineIcon} from '@cs/assets';
+import {useCustomTheme} from '@cs/helpers';
 
 export enum MainRoutes {
   CoffeeDetail = 'Detail',
@@ -33,9 +34,11 @@ export type MainStackParamsList = {
 const MainStack = createSharedElementStackNavigator<MainStackParamsList>();
 
 const MainNavigator = () => {
+  const theme = useCustomTheme();
+
   const renderBackArrow = useCallback(
-    () => <Icon name="angle-left" size={24} color={Colors.darkestGray} />,
-    [],
+    () => <Icon name="angle-left" size={24} color={theme.darkTextColor} />,
+    [theme.darkTextColor],
   );
 
   const renderCHeaderBackButton = useCallback(
@@ -78,9 +81,12 @@ const MainNavigator = () => {
           presentation: 'modal',
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           headerRight: () => renderHeaderRightButton(),
-          headerTitleStyle: STYLES.headerTitleStyles,
-          headerBackgroundContainerStyle: {
-            backgroundColor: Colors.lightGray100,
+          headerTitleStyle: [
+            STYLES.headerTitleStyles,
+            {color: theme.textColor},
+          ],
+          headerStyle: {
+            backgroundColor: theme.background,
           },
         }}
         sharedElements={route => {
