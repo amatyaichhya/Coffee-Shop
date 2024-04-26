@@ -3,6 +3,7 @@ import {StyleSheet, FlatList, Pressable} from 'react-native';
 
 import {AppFonts, Colors, hs, vs} from '@cs/constants';
 import {FontedText} from '@cs/components';
+import {useCustomTheme} from '@cs/helpers';
 
 interface CategoryOptionsProps {
   categories: Array<Variety>;
@@ -33,16 +34,20 @@ const CategoryOptions: FC<CategoryOptionsProps> = ({
   categories,
   handleSelectCategories,
 }) => {
+  const theme = useCustomTheme();
+
   const handleRenderListItem = ({item}: {item: Variety}) => (
     <Pressable
       onPress={() => handleSelectCategories(item.id)}
       style={{
         ...STYLES.categoryStyles,
-        backgroundColor: item.isSelected ? Colors.primary : Colors.lightGray,
+        backgroundColor: item.isSelected
+          ? Colors.primary
+          : theme.secondaryBackground,
       }}>
       <FontedText
         text={item.variety}
-        color={item.isSelected ? Colors.white : Colors.lightBlack50}
+        color={item.isSelected ? Colors.white : theme.textColor}
         fontFamily={AppFonts.SoraSemiBold}
         fontSize={hs.w14}
       />

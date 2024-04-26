@@ -3,4 +3,5 @@ export const Images = {
   promoBackground: require('./adPromo.png'),
   beanIcon: require('./bean.png'),
   beanPackageIcon: require('./coffeePackage.png'),
+  defaultImg: require('./defaultImg.png'),
 };

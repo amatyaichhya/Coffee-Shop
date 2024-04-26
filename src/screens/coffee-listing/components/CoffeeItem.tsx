@@ -3,7 +3,7 @@ import {View, StyleSheet, Pressable} from 'react-native';
 import {SharedElement} from 'react-navigation-shared-element';
 
 import {AppFonts, Colors, CommonStyles, hs, vs} from '@cs/constants';
-import {heightToDp, widthToDp} from '@cs/helpers';
+import {heightToDp, useCustomTheme, widthToDp} from '@cs/helpers';
 import {FontedText, CImage} from '@cs/components';
 import Icon from 'react-native-vector-icons/Feather';
 
@@ -21,8 +21,8 @@ const STYLES = StyleSheet.create({
     backgroundColor: Colors.white,
     shadowColor: 'rgba(144, 143, 143, 0.6)',
     shadowOffset: {width: 0, height: 2},
-    shadowOpacity: 0.3,
-    shadowRadius: vs.h4,
+    shadowOpacity: 0.6,
+    shadowRadius: vs.h16,
     borderRadius: hs.w16,
     borderWidth: widthToDp(0.2),
     borderColor: Colors.lightGray100,
@@ -55,8 +55,15 @@ const CoffeeItem: FC<CoffeeItemProps> = ({
   coffeePrice,
   onNavigateToDetail,
 }) => {
+  const theme = useCustomTheme();
+
   return (
-    <Pressable onPress={onNavigateToDetail} style={STYLES.cardContainerStyles}>
+    <Pressable
+      onPress={onNavigateToDetail}
+      style={[
+        STYLES.cardContainerStyles,
+        {backgroundColor: theme.plainBackground, borderColor: theme.background},
+      ]}>
       <SharedElement id={coffeeId}>
         <View style={STYLES.coffeeImage}>
           <CImage
@@ -71,7 +78,7 @@ const CoffeeItem: FC<CoffeeItemProps> = ({
           <FontedText
             text={coffeeName}
             numberOfLines={1}
-            color={Colors.darkestGray}
+            color={theme.darkTextColor}
             fontFamily={AppFonts.SoraSemiBold}
           />
 
@@ -80,7 +87,7 @@ const CoffeeItem: FC<CoffeeItemProps> = ({
               text={coffeeCategory}
               fontSize={hs.w12}
               numberOfLines={1}
-              color={Colors.darkGray}
+              color={theme.lightTextColor}
             />
           ) : null}
         </View>
@@ -92,7 +99,7 @@ const CoffeeItem: FC<CoffeeItemProps> = ({
               fontSize={hs.w18}
               numberOfLines={1}
               fontFamily={AppFonts.SoraSemiBold}
-              color={Colors.lightBlack50}
+              color={theme.textColor}
             />
           ) : null}
 

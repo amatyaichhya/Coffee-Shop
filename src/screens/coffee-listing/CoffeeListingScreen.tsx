@@ -1,6 +1,15 @@
 import React, {FC, useEffect, useState} from 'react';
-import {FlatList, StatusBar, View, StyleSheet, Keyboard} from 'react-native';
+import {
+  FlatList,
+  StatusBar,
+  View,
+  StyleSheet,
+  Keyboard,
+  Alert,
+} from 'react-native';
 import {StickyHeaderScrollView} from 'react-native-sticky-parallax-header';
+import {GoogleSignin} from '@react-native-google-signin/google-signin';
+
 import {CommonStyles, hs, vs, Colors} from '@cs/constants';
 import {
   BottomTabRoutes,
@@ -19,6 +28,9 @@ import {
 } from './components';
 import {coffeeVarieties} from './staticData';
 import {height} from '@cs/helpers';
+import {useAppDispatch, useAppSelector} from '@cs/hooks';
+import {resetAuthState} from '@cs/redux/slices';
+import {useCustomTheme} from '@cs/helpers';
 
 const STYLES = StyleSheet.create({
   contentContainerStyles: {
@@ -31,6 +43,11 @@ const STYLES = StyleSheet.create({
 const CoffeeListingScreen: FC<
   HomeBottomTabScreenProps<BottomTabRoutes.Home>
 > = ({navigation}) => {
+  const dispatch = useAppDispatch();
+  const {user} = useAppSelector(state => state.auth);
+
+  const theme = useCustomTheme();
+
   const [textWidth, setTextWidth] = useState(0);
   const [textBottomWidth, setTextBottomWidth] = useState(0);
   const [categories, setCategories] = useState(coffeeVarieties);
@@ -83,6 +100,27 @@ const CoffeeListingScreen: FC<
     }
   };
 
+  const onLogoutPress = async () => {
+    try {
+      await GoogleSignin.signOut();
+      dispatch(resetAuthState());
+    } catch {
+      Alert.alert('Error', 'Unable to log out, please try again.');
+    }
+  };
+
+  const handleLogout = () => {
+    Alert.alert('Log Out', 'Are you sure you want to log out?', [
+      {
+        text: 'Log Out',
+        onPress: onLogoutPress,
+      },
+      {
+        text: 'Cancel',
+      },
+    ]);
+  };
+
   const handleRenderItem = ({item}: {item: Coffee}) =>
     isLoading ? (
       <CoffeePlaceholder />
@@ -105,7 +143,13 @@ const CoffeeListingScreen: FC<
       />
     );
 
-  const handleHeaderComponent = () => <HeaderComponent />;
+  const handleHeaderComponent = () => (
+    <HeaderComponent
+      username={user?.name || ''}
+      userPhoto={user?.photo || ''}
+      handleLogout={handleLogout}
+    />
+  );
 
   const handleEmptyComponent = () =>
     isLoading ? null : (
@@ -116,7 +160,7 @@ const CoffeeListingScreen: FC<
           CommonStyles.alignItemsCenter,
           {height: height / 3},
         ]}>
-        <FontedText text="No products available." />
+        <FontedText text="No products available." color={theme.textColor} />
       </View>
     );
 
@@ -130,7 +174,7 @@ const CoffeeListingScreen: FC<
           handleTextChange={handleTextChange}
         />
       )}
-      contentContainerStyle={{backgroundColor: Colors.lightGray100}}
+      contentContainerStyle={{backgroundColor: theme.background}}
       showsVerticalScrollIndicator={false}>
       <StatusBar barStyle="light-content" backgroundColor={Colors.black} />
 

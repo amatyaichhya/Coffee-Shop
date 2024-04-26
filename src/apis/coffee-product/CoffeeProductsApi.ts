@@ -6,8 +6,8 @@ import {keysToCamel} from '@cs/utils';
 export const CoffeeProductsApi = AppApi.injectEndpoints({
   endpoints: build => ({
     getCoffeeProductList: build.query({
-      query: name => ({
-        url: `${Config.API_URL}?name=${name}`,
+      query: () => ({
+        url: `${Config.API_URL}`,
         method: 'GET',
       }),
       transformErrorResponse: (response: any) => keysToCamel(response),

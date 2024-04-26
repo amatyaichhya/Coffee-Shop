@@ -1,11 +1,15 @@
 import React, {FC} from 'react';
-import {StyleSheet, Pressable, Image, View} from 'react-native';
+import {StyleSheet, Pressable, View} from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
 import {AppFonts, Colors, CommonStyles, hs, vs} from '@cs/constants';
-import {FontedText} from '@cs/components';
+import {CImage, FontedText} from '@cs/components';
 
-interface HeaderComponentProps {}
+interface HeaderComponentProps {
+  username: string;
+  userPhoto: string;
+  handleLogout: () => void;
+}
 
 const STYLES = StyleSheet.create({
   containerStyles: {
@@ -18,11 +22,16 @@ const STYLES = StyleSheet.create({
   imageContainer: {
     height: hs.w44,
     width: hs.w44,
+    borderRadius: hs.w12,
     overflow: 'hidden',
   },
 });
 
-const HeaderComponent: FC<HeaderComponentProps> = () => {
+const HeaderComponent: FC<HeaderComponentProps> = ({
+  username,
+  userPhoto,
+  handleLogout,
+}) => {
   return (
     <View style={STYLES.containerStyles}>
       <View
@@ -33,7 +42,7 @@ const HeaderComponent: FC<HeaderComponentProps> = () => {
         ]}>
         <View>
           <FontedText
-            text="Location"
+            text="Welcome"
             fontSize={hs.w12}
             customTextStyle={STYLES.letterSpacing}
             color={Colors.white}
@@ -42,7 +51,7 @@ const HeaderComponent: FC<HeaderComponentProps> = () => {
           <Pressable
             style={[CommonStyles.flexRow, CommonStyles.alignItemsCenter]}>
             <FontedText
-              text="Bilzen,Tanjungbalai"
+              text={username || ''}
               fontSize={hs.w14}
               fontFamily={AppFonts.SoraSemiBold}
               customTextStyle={{marginRight: hs.w2}}
@@ -53,14 +62,12 @@ const HeaderComponent: FC<HeaderComponentProps> = () => {
           </Pressable>
         </View>
 
-        <View style={STYLES.imageContainer}>
-          <Image
-            source={{
-              uri: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=1000&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8cHJvZmlsZXxlbnwwfHwwfHx8MA%3D%3D',
-            }}
-            style={[CommonStyles.image, {borderRadius: hs.w12}]}
+        <Pressable style={STYLES.imageContainer} onPress={handleLogout}>
+          <CImage
+            imageSource={userPhoto}
+            customContainerStyle={CommonStyles.image}
           />
-        </View>
+        </Pressable>
       </View>
     </View>
   );
