@@ -1,11 +1,18 @@
 # Coffee Shop
 
 # Table of Contents
-- [CoffeeShop]
+- [CoffeeShop](#coffee-shop)
+- [Animation](#animation)
 - [Editor Setup](#editor-setup)
 - [Branching](#branching)
 - [Development Setup](#development-setup)
 - [Project Configuration](#project-configuration)
+
+# Coffee Shop
+https://github.com/amatyaichhya/Coffee-Shop/assets/40434515/cb5ab26a-1371-4c70-95aa-774f36551a3a
+
+# Animation
+We've used React native shared elements to share components between multiple navigation screens
 
 # Editor Setup
 Following tools are used to make code look consistent. Please install the mentioned tools below,
