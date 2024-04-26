@@ -65,7 +65,7 @@ const CommonStyles = StyleSheet.create({
   },
   errorText: {
     fontSize: hs.w12,
-    color: Colors.red,
+    color: Colors.black,
   },
   width100: {
     width: '100%',
