@@ -1,4 +1,14 @@
 {
   "name": "Coffee Shop",
-  "displayName": "Coffee Shop"
+  "displayName": "Coffee Shop",
+  "ios": {
+      "version": "1.0.0",
+      "buildNumber": "1",
+      "changeLog": "Change log for current release."
+  },
+  "android": {
+      "version": "1.0.0",
+      "buildNumber": 1,
+      "changeLog": "Change log for current release."
+  }
 }
