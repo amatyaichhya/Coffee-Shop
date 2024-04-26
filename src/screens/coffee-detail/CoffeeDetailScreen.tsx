@@ -5,19 +5,19 @@ import {
   ActivityIndicator,
   Pressable,
   FlatList,
-  StyleSheet,
   Text,
   Image,
+  RefreshControl,
 } from 'react-native';
+import {SharedElement} from 'react-navigation-shared-element';
 
 import {CImage, FontedText} from '@cs/components';
 import {AppFonts, Colors, CommonStyles, hs, vs} from '@cs/constants';
 import {MainRoutes, MainStackScreenProps} from '@cs/routes';
-import {heightToDp, width} from '@cs/helpers';
-import {SharedElement} from 'react-navigation-shared-element';
+import {height} from '@cs/helpers';
 import {useGetCoffeeProductDetailQuery} from '@cs/apis';
 import {Images} from '@cs/assets';
-import {RefreshControl} from 'react-native';
+import {CoffeeDetailStyles as STYLES} from './styles';
 
 interface Size {
   id: number;
@@ -30,34 +30,6 @@ const sizes = [
   {id: 2, size: 'M', isSelected: true},
   {id: 3, size: 'L', isSelected: false},
 ];
-
-const STYLES = StyleSheet.create({
-  imageContainer: {
-    height: heightToDp(226),
-    marginVertical: vs.h26,
-    borderRadius: hs.w12,
-  },
-  iconContainer: {
-    backgroundColor: Colors.secondary,
-    height: hs.w44,
-    width: hs.w44,
-    borderRadius: hs.w14,
-  },
-  imageIcon: {height: hs.w22, width: hs.w22},
-  divider: {
-    height: vs.h1,
-    backgroundColor: Colors.lightGray200,
-    marginBottom: vs.h20,
-    marginTop: vs.h26,
-  },
-  detailContainer: {paddingBottom: vs.h22, gap: vs.h12},
-  sizeContainer: {
-    borderWidth: hs.w1,
-    paddingVertical: vs.h10,
-    borderRadius: hs.w12,
-    width: width / 3 - hs.w28,
-  },
-});
 
 const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
   route,
@@ -155,6 +127,16 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
           <View style={[CommonStyles.flexRoot]}>
             <ActivityIndicator color={Colors.primary} size={'small'} />
           </View>
+        ) : productDetail && Object.keys(productDetail).length === 0 ? (
+          <View
+            style={[
+              CommonStyles.flexRoot,
+              CommonStyles.justifyContentCenter,
+              CommonStyles.alignItemsCenter,
+              {height: height / 3},
+            ]}>
+            <FontedText text="No details available." />
+          </View>
         ) : (
           <View style={{marginBottom: vs.h14}}>
             <View style={{marginBottom: vs.h6}}>
@@ -232,7 +214,9 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
                 }}>
                 {showFullContent
                   ? productDetail?.description
-                  : `${truncatedDescription}${shouldShowSeeMore ? '... ' : ''}`}
+                  : `${truncatedDescription}${
+                      shouldShowSeeMore ? '... ' : ''
+                    }` || ''}
                 <Text style={{color: Colors.primary}}>
                   {!showFullContent ? ' Read More' : ' Show Less'}
                 </Text>
@@ -252,7 +236,6 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
                 keyExtractor={(_, index) => index.toString()}
                 horizontal
                 scrollEnabled={false}
-                // style={CommonStyles.flexRoot}
                 contentContainerStyle={[
                   CommonStyles.flexGrowRoot,
                   CommonStyles.justifySpaceBetween,
@@ -267,58 +250,45 @@ const CoffeeDetailScreen: FC<MainStackScreenProps<MainRoutes.CoffeeDetail>> = ({
         )}
       </ScrollView>
 
-      <View
-        style={[
-          CommonStyles.flexRow,
-          CommonStyles.justifySpaceBetween,
-          {
-            shadowColor: 'rgba(144, 143, 143, 0.6)',
-            shadowOffset: {width: 10, height: 40},
-            shadowOpacity: 0.3,
-            shadowRadius: hs.w20,
-            borderTopLeftRadius: hs.w20,
-            borderTopRightRadius: hs.w20,
-            borderWidth: hs.w1,
-            borderColor: Colors.lightGray200,
-            backgroundColor: Colors.lightGray100,
-            paddingHorizontal: hs.w18,
-            paddingVertical: vs.h20,
-          },
-        ]}>
-        <View style={[CommonStyles.alignItemsCenter, {flex: 2}]}>
-          <View>
-            <FontedText
-              text="Price"
-              color={Colors.darkGray}
-              fontSize={hs.w14}
-            />
-            <FontedText
-              text={productDetail?.price ? `$ ${productDetail?.price}` : 'N/A'}
-              color={Colors.primary}
-              fontFamily={AppFonts.SoraSemiBold}
-              fontSize={hs.w18}
-            />
-          </View>
-        </View>
-
-        <Pressable
+      {productDetail && Object.keys(productDetail).length !== 0 ? (
+        <View
           style={[
-            CommonStyles.alignItemsCenter,
-            CommonStyles.justifyContentCenter,
-            {
-              backgroundColor: Colors.primary,
-              borderRadius: hs.w16,
-              paddingVertical: vs.h18,
-              flex: 3,
-            },
+            CommonStyles.flexRow,
+            CommonStyles.justifySpaceBetween,
+            STYLES.footerContainer,
           ]}>
-          <FontedText
-            text="Buy Now"
-            color={Colors.white}
-            fontFamily={AppFonts.SoraSemiBold}
-          />
-        </Pressable>
-      </View>
+          <View style={[CommonStyles.alignItemsCenter, STYLES.footerText]}>
+            <View>
+              <FontedText
+                text="Price"
+                color={Colors.darkGray}
+                fontSize={hs.w14}
+              />
+              <FontedText
+                text={
+                  productDetail?.price ? `$ ${productDetail?.price}` : 'N/A'
+                }
+                color={Colors.primary}
+                fontFamily={AppFonts.SoraSemiBold}
+                fontSize={hs.w18}
+              />
+            </View>
+          </View>
+
+          <Pressable
+            style={[
+              CommonStyles.alignItemsCenter,
+              CommonStyles.justifyContentCenter,
+              STYLES.footerButton,
+            ]}>
+            <FontedText
+              text="Buy Now"
+              color={Colors.white}
+              fontFamily={AppFonts.SoraSemiBold}
+            />
+          </Pressable>
+        </View>
+      ) : null}
     </View>
   );
 };
