@@ -8,6 +8,7 @@ import {CoffeeListingScreen, EmptyTabsScreen} from '@cs/screens';
 import {MainRoutes} from './MainNavigator';
 import {MainStackScreenProps} from './types';
 import {CartIcon, HeartIcon, HomeIcon, NotificationIcon} from '@cs/assets';
+import {useCustomTheme} from '@cs/helpers';
 
 export enum BottomTabRoutes {
   Home = 'Home',
@@ -23,13 +24,15 @@ export type BottomTabParamsList = {
   [BottomTabRoutes.Notification]: undefined;
 };
 
-const TabBarBGColor = Colors.white;
-
 const BottomTab = createBottomTabNavigator<BottomTabParamsList>();
 
 const BottomTabNavigator: FC<
   MainStackScreenProps<MainRoutes.BottomTab>
 > = ({}) => {
+  const theme = useCustomTheme();
+
+  const TabBarBGColor = theme.headerBackground;
+
   return (
     <BottomTab.Navigator
       screenOptions={{
@@ -40,6 +43,10 @@ const BottomTabNavigator: FC<
         },
         tabBarInactiveTintColor: Colors.darkGray,
         tabBarActiveTintColor: Colors.primary,
+        tabBarHideOnKeyboard: true,
+        tabBarStyle: {
+          borderTopWidth: 0,
+        },
       }}>
       <BottomTab.Screen
         name={BottomTabRoutes.Home}

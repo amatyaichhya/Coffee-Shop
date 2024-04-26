@@ -1,24 +1,29 @@
 import React, {useCallback} from 'react';
 import {Pressable, StyleSheet} from 'react-native';
-import {
-  CardStyleInterpolators,
-  createStackNavigator,
-} from '@react-navigation/stack';
+import {CardStyleInterpolators} from '@react-navigation/stack';
+import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 import {HeaderBackButton} from '@react-navigation/elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import {CoffeeDetailScreen} from '@cs/screens';
-import {AppFonts, hs, vs} from '@cs/constants';
+import {AppFonts, vs} from '@cs/constants';
 import {BottomTabNavigator} from './index';
 import {HeartOutlineIcon} from '@cs/assets';
+import {useCustomTheme} from '@cs/helpers';
 
 export enum MainRoutes {
   CoffeeDetail = 'Detail',
   BottomTab = 'BottomTab',
 }
 
+export interface Coffee {
+  id: number;
+  imageUrl: string;
+  name: string;
+}
+
 interface CoffeeDetailRouteParams {
-  id: any;
+  item: Coffee;
 }
 
 export type MainStackParamsList = {
@@ -26,21 +31,21 @@ export type MainStackParamsList = {
   [MainRoutes.BottomTab]: undefined;
 };
 
-const MainStack = createStackNavigator<MainStackParamsList>();
+const MainStack = createSharedElementStackNavigator<MainStackParamsList>();
 
 const MainNavigator = () => {
+  const theme = useCustomTheme();
+
   const renderBackArrow = useCallback(
-    (props: any) => (
-      <Icon name="angle-left" size={24} color={props.tintColor} />
-    ),
-    [],
+    () => <Icon name="angle-left" size={24} color={theme.darkTextColor} />,
+    [theme.darkTextColor],
   );
 
   const renderCHeaderBackButton = useCallback(
     (props: any) => (
       <HeaderBackButton
         {...props}
-        backImage={() => renderBackArrow(props)}
+        backImage={() => renderBackArrow()}
         style={STYLES.headerLeftStyles}
       />
     ),
@@ -76,7 +81,24 @@ const MainNavigator = () => {
           presentation: 'modal',
           cardStyleInterpolator: CardStyleInterpolators.forVerticalIOS,
           headerRight: () => renderHeaderRightButton(),
-          headerTitleStyle: STYLES.headerTitleStyles,
+          headerTitleStyle: [
+            STYLES.headerTitleStyles,
+            {color: theme.textColor},
+          ],
+          headerStyle: {
+            backgroundColor: theme.background,
+          },
+        }}
+        sharedElements={route => {
+          const {item} = route.params;
+
+          return [
+            {
+              id: `${item.id}`,
+              animation: 'move',
+              resize: 'auto',
+            },
+          ];
         }}
       />
     </MainStack.Navigator>
